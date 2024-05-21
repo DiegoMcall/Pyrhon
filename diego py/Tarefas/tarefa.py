@@ -12,6 +12,7 @@ def adicionar():
     if tarefa:
         lista_tarefas.insert(0,tarefa)
         nova_tarefa.delete(0,END)
+        salvar_tarefas()
     else:
         messagebox.showerror('Erro no APP', 'Digite uma tarefa!')
         
@@ -19,8 +20,26 @@ def deletar():
     dTarefa = lista_tarefas.curselection()
     if dTarefa:
          lista_tarefas.delete(dTarefa)
+         salvar_tarefas()
     else:
         messagebox.showerror('Erro no App', 'Selecione uma tarefa na lista!')
+        
+def salvar_tarefas():
+    with open('tarefas.txt', 'w') as t:
+        tarefas = lista_tarefas.get(0, END)
+        
+        for x in tarefas:
+            t.write(x +'\n')
+            
+def carregar_tarefas():
+ try:
+   with open('tarefas.txt', 'r') as t:
+        tarefas = t.readlines()
+        
+        for x in tarefas:
+            lista_tarefas.insert(0,x.strip())
+ except:
+    messagebox.showerror('Erro no APP', 'Não foi possivel carregar as tarefas!')
 #----------------------
 
 # Lista de cores e fonte
@@ -57,4 +76,5 @@ ctk.CTkLabel(janela, text='Tarefas pendentes', font=font2, text_color=cor2).plac
 lista_tarefas = Listbox(janela, width=40, height=15)
 lista_tarefas.place(x=31,y=230)
 
+carregar_tarefas()
 janela.mainloop()
